@@ -48,6 +48,7 @@ encode_extensions(_) -> [].
 iolist(pikachu, Record) ->
     [pack(1, required, with_default(Record#pikachu.abc, none), string, [])].
 
+with_default(Val, none) -> Val;
 with_default(Default, Default) -> undefined;
 with_default(Val, _) -> Val.
 
@@ -147,8 +148,8 @@ decode(Bytes, Types, Acc) ->
             end
     end.
 
-unpack_value(Binary, string) when is_binary(Binary) ->
-    binary_to_list(Binary);
+%unpack_value(Binary, string) when is_binary(Binary) ->
+%    binary_to_list(Binary);
 unpack_value(Value, _) -> Value.
 
 to_record(pikachu, DecodedTuples) ->

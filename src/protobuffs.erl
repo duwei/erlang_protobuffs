@@ -26,7 +26,7 @@
 %% @doc A protcol buffers encoding and decoding module.
 -module(protobuffs).
 
-%% Public
+%% Pubic
 -export([encode/3, encode_packed/3, decode/2, decode_packed/2]).
 
 %% Used by generated *_pb file. Not intended to used by User
@@ -318,8 +318,8 @@ decode_value(Bytes, ?TYPE_VARINT, ExpectedType) ->
     {typecast(Value, ExpectedType), Rest};
 decode_value(Bytes, ?TYPE_STRING, string) ->
     {Length, Rest} = decode_varint(Bytes),
-    {Value,Rest1} = split_binary(Rest, Length),
-    {[C || <<C/utf8>> <= Value],Rest1};
+    {Value,Rest1} = split_binary(Rest, Length);
+%%    {[C || <<C/utf8>> <= Value],Rest1};
 decode_value(Bytes, ?TYPE_STRING, bytes) ->
     {Length, Rest} = decode_varint(Bytes),
     split_binary(Rest, Length);
@@ -372,7 +372,7 @@ typecast(Value, _) ->
 %% @hidden
 -spec encode_field_tag(FieldID :: non_neg_integer(),
 		       FieldType :: encoded_field_type()) ->
-			      iodata().
+			      binary().
 encode_field_tag(FieldID, FieldType) when FieldID band 16#3fffffff =:= FieldID ->
     encode_varint((FieldID bsl 3) bor FieldType).
 
@@ -385,13 +385,13 @@ encode_varint_field(FieldID, Integer) ->
 
 %% @hidden
 -spec encode_varint(I :: integer()) ->
-			   iodata().
+			   binary().
 encode_varint(I) ->
     encode_varint(I, []).
 
 %% @hidden
 -spec encode_varint(I :: integer(), Acc :: list()) ->
-			   iodata().
+			   binary().
 encode_varint(I, Acc) when I =< 16#7f ->
     lists:reverse([I | Acc]);
 encode_varint(I, Acc) ->
