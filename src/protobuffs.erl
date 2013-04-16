@@ -318,7 +318,7 @@ decode_value(Bytes, ?TYPE_VARINT, ExpectedType) ->
     {typecast(Value, ExpectedType), Rest};
 decode_value(Bytes, ?TYPE_STRING, string) ->
     {Length, Rest} = decode_varint(Bytes),
-    {Value,Rest1} = split_binary(Rest, Length);
+    split_binary(Rest, Length);
 %%    {[C || <<C/utf8>> <= Value],Rest1};
 decode_value(Bytes, ?TYPE_STRING, bytes) ->
     {Length, Rest} = decode_varint(Bytes),
